@@ -1,6 +1,9 @@
 #include <iostream>
+#include <memory>
 
-int main() {
+struct Node {
+  int value;
+  std::unique_ptr<Node> next;
+};
 
-    return 0;
-}
+int main() { return 0; }
