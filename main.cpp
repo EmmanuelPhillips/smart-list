@@ -18,10 +18,26 @@ public:
   LinkedList() : m_head{nullptr} {}
   // no destructor - unique_ptr cleans up after itself.
 
-  void push_front(int value) {}
-  void pop_front() {}
+  void push_front(int value) {
+    if (m_head == nullptr) {
+      m_head = std::make_unique<Node>(value);
+      return;
+    }
+    std::unique_ptr<Node> temp{std::make_unique<Node>(value)};
+    temp->next = std::move(m_head);
+    m_head = std::move(temp);
+  }
+
+  void pop_front() {
+    if (m_head == nullptr) {
+      return;
+    }
+    m_head = std::move(m_head->next); // since its a smart pointer, moving to
+                                      // next will safely delete the old Node
+  }
+
   void print() const {}
-  bool is_empty() const {}
+  bool is_empty() const { return true; }
 };
 
 int main() { return 0; }
