@@ -19,10 +19,6 @@ public:
   // no destructor - unique_ptr cleans up after itself.
 
   void push_front(int value) {
-    if (m_head == nullptr) {
-      m_head = std::make_unique<Node>(value);
-      return;
-    }
     std::unique_ptr<Node> temp{std::make_unique<Node>(value)};
     temp->next = std::move(m_head);
     m_head = std::move(temp);
@@ -36,8 +32,16 @@ public:
                                       // next will safely delete the old Node
   }
 
-  void print() const {}
-  bool is_empty() const { return true; }
+  void print() const {
+    const Node *current = m_head.get();
+    while (current) {
+      std::cout << current->value << ' ';
+      current = current->next.get();
+    }
+    std::cout << '\n';
+  }
+
+  bool is_empty() const { return m_head == nullptr; }
 };
 
 int main() { return 0; }
